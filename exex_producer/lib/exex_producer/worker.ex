@@ -15,10 +15,11 @@ defmodule ExexProducer.Worker do
     bid = info["bid"]
     ask = info["ask"]
     rmp = info["regularMarketPrice"]
-    IO.inspect("Current value FB: $#{rmp} -- $#{ask} $#{bid}")
+    spread = String.to_integer(ask) - String.to_integer(bid)
+    IO.inspect("Current value FB: $#{rmp} spread $#{spread} -- $#{ask} $#{bid}")
     schedule_stock_fetch()
-    s = Map.put(state, :bid, bid)
-    s = Map.put(state, :ask, ask)
+    produce_data(rmp, spread)
+    s = Map.put(state, :spread, spread)
     {:noreply, s}
   end
 
@@ -34,5 +35,10 @@ defmodule ExexProducer.Worker do
 
   def schedule_stock_fetch do
     Process.send_after(self(), :stock_fetch, 5_000)
+  end
+
+  defp produce_data(price, spread) do
+    Kaffe.Producer.produce_sync("price", [{"price", price}])
+    Kaffe.Producer.produce_sync("spread", [{"spread", spread}])
   end
 end
