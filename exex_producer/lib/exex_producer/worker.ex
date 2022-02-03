@@ -11,19 +11,19 @@ defmodule ExexProducer.Worker do
   end
 
   def handle_info(:stock_fetch, state) do
-    info = stock_info()
+    info = stock_info("FB")
     bid = info["bid"]
     ask = info["ask"]
     rmp = info["regularMarketPrice"]
-    IO.inspect("Current value $#{rmp} -- $#{ask} $#{bid}")
+    IO.inspect("Current value FB: $#{rmp} -- $#{ask} $#{bid}")
     schedule_stock_fetch()
     s = Map.put(state, :bid, bid)
     s = Map.put(state, :ask, ask)
     {:noreply, s}
   end
 
-  defp stock_info do
-    YahooFinance.custom_quote("FB", [:regularMarketPrice, :bid, :ask])
+  defp stock_info(symbol) do
+    YahooFinance.custom_quote(symbol, [:regularMarketPrice, :bid, :ask])
     |> elem(1)
     |> elem(1)
     |> Jason.decode!()
