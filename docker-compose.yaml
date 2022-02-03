@@ -1,0 +1,5 @@
+version: "3.9"
+services:
+  producer:
+    build:
+      context: ./exex_producer
