@@ -15,7 +15,7 @@ defmodule ExexProducer.Worker do
     bid = info["bid"]
     ask = info["ask"]
     rmp = info["regularMarketPrice"]
-    spread = String.to_integer(ask) - String.to_integer(bid)
+    spread = abs(ask - bid)
     IO.inspect("Current value FB: $#{rmp} spread $#{spread} -- $#{ask} $#{bid}")
     schedule_stock_fetch()
     produce_data(rmp, spread)
@@ -38,7 +38,8 @@ defmodule ExexProducer.Worker do
   end
 
   defp produce_data(price, spread) do
-    Kaffe.Producer.produce_sync("price", [{"price", price}])
-    Kaffe.Producer.produce_sync("spread", [{"spread", spread}])
+    price_s = Float.to_string(price)
+    Kaffe.Producer.produce_sync("price", "price", price_s)
+    #Kaffe.Producer.produce_sync("spread", [{"spread", spread}])
   end
 end

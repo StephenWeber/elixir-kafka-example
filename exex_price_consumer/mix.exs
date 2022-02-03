@@ -1,9 +1,9 @@
-defmodule ExexProducer.MixProject do
+defmodule ExexPriceConsumer.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :exex_producer,
+      app: :exex_price_consumer,
       version: "0.1.0",
       elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
@@ -11,17 +11,17 @@ defmodule ExexProducer.MixProject do
     ]
   end
 
+  # Run "mix help compile.app" to learn about applications.
   def application do
     [
       extra_applications: [:logger, :kaffe],
-      mod: {ExexProducer.Application, []}
+      mod: {ExexPriceConsumer.Application, []}
     ]
   end
 
+  # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:jason, "~> 1.2"},
-      {:yahoo_finance_elixir, "~> 0.1.3"},
       {:kaffe, "~> 1.0"}
     ]
   end
