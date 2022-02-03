@@ -1,0 +1,5 @@
+./_build
+./test
+*.md
+.elixir_ls
+Dockerfile
